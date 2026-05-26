@@ -21,19 +21,19 @@ const seed = async () => {
       Order.deleteMany(),
     ]);
 
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@divineaura.com';
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@dhruvglobaltradingcompany.com';
     const adminPassword = process.env.ADMIN_PASSWORD || 'Admin@123';
 
     const [adminUser] = await User.create([
       {
-        name: 'DivineAura Admin',
+        name: 'Dhruv Global Trading Company Admin',
         email: adminEmail,
         password: adminPassword,
         role: 'admin',
       },
       {
         name: 'Sample Devotee',
-        email: 'devotee@divineaura.com',
+        email: 'devotee@dhruvglobaltradingcompany.com',
         password: 'User@123',
         role: 'user',
       },

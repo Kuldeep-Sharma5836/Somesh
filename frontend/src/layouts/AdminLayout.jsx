@@ -14,7 +14,7 @@ const AdminLayout = () => {
       <div className="container-pad grid gap-6 py-6 md:grid-cols-[240px_1fr]">
         <aside className="card h-fit">
           <Link to="/admin/dashboard" className="font-display text-2xl font-semibold text-maroon">
-            DivineAura Admin
+            Dhruv Global Trading Company Admin
           </Link>
           <nav className="mt-6 space-y-2">
             <NavLink to="/admin/dashboard" className={itemStyle}>

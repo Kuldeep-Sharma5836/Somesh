@@ -26,7 +26,7 @@ const Navbar = () => {
     <header className="sticky top-0 z-30 border-b border-gold/20 bg-cream/95 backdrop-blur">
       <div className="container-pad flex flex-wrap items-center justify-between gap-4 py-4">
         <Link to="/" className="font-display text-3xl font-bold text-maroon">
-          DivineAura
+          Dhruv Global Trading Company
         </Link>
 
         <form onSubmit={submitSearch} className="hidden items-center md:flex">

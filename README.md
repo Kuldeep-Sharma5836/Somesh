@@ -1,6 +1,6 @@
-# DivineAura - MERN E-Commerce (Spiritual & Worship Products)
+# Dhruv Global Trading Company - MERN E-Commerce (Spiritual & Worship Products)
 
-DivineAura is a full-stack MERN e-commerce project with a premium spiritual UI, customer storefront, and secure admin dashboard.
+Dhruv Global Trading Company is a full-stack MERN e-commerce project with a premium spiritual UI, customer storefront, and secure admin dashboard.
 
 ## Tech Stack
 
@@ -97,11 +97,11 @@ npm run dev
 
 ```env
 PORT=5000
-MONGO_URI=mongodb://127.0.0.1:27017/divineaura
+MONGO_URI=mongodb://127.0.0.1:27017/dhruvglobaltradingcompany
 JWT_SECRET=replace_with_a_strong_secret
 JWT_EXPIRES_IN=7d
 CLIENT_URL=http://localhost:5173
-ADMIN_EMAIL=admin@divineaura.com
+ADMIN_EMAIL=admin@dhruvglobaltradingcompany.com
 ADMIN_PASSWORD=Admin@123
 ```
 
@@ -115,8 +115,8 @@ VITE_API_BASE_URL=http://localhost:5000/api
 
 After running `npm run seed` in backend:
 
-- Admin: admin@divineaura.com / Admin@123
-- User: devotee@divineaura.com / User@123
+- Admin: admin@dhruvglobaltradingcompany.com / Admin@123
+- User: devotee@dhruvglobaltradingcompany.com / User@123
 
 ## API Endpoints (Summary)
 

@@ -6,7 +6,7 @@ const orderItemSchema = new mongoose.Schema(
     name: { type: String, required: true },
     image: {
       type: String,
-      default: 'https://via.placeholder.com/150x150?text=DivineAura',
+      default: 'https://via.placeholder.com/150x150?text=Dhruv+Global+Trading+Company',
     },
     qty: { type: Number, required: true, min: 1 },
     price: { type: Number, required: true, min: 0 },

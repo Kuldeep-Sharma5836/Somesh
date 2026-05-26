@@ -29,7 +29,7 @@ const CartPage = () => {
     }
 
     try {
-      const fallbackImage = 'https://via.placeholder.com/150x150?text=DivineAura';
+      const fallbackImage = 'https://via.placeholder.com/150x150?text=Dhruv+Global+Trading+Company';
       const orderPayload = {
         orderItems: cartItems.map((item) => ({
           product: item._id,
@@ -63,7 +63,7 @@ const CartPage = () => {
           amount: orderData.amount,
           currency: orderData.currency,
           order_id: orderData.orderId,
-          name: 'DivineAura',
+          name: 'Dhruv Global Trading Company',
           description: 'Order payment',
           handler: async (response) => {
             try {

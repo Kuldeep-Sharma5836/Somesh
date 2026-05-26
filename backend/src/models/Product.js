@@ -17,7 +17,7 @@ const productSchema = new mongoose.Schema(
     description: { type: String, required: true },
     price: { type: Number, required: true, min: 0 },
     countInStock: { type: Number, required: true, min: 0, default: 0 },
-    brand: { type: String, default: 'DivineAura' },
+    brand: { type: String, default: 'Dhruv Global Trading Company' },
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
     images: [{ type: String }],
     reviews: [reviewSchema],

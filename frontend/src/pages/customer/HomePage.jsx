@@ -33,7 +33,7 @@ const HomePage = () => {
     fetchHomeData();
   }, []);
 
-  if (loading) return <Spinner label="Loading DivineAura collection..." />;
+  if (loading) return <Spinner label="Loading Dhruv Global Trading Company collection..." />;
 
   return (
     <div>

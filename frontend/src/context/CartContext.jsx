@@ -6,18 +6,18 @@ const CartContext = createContext(null);
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
-    const data = localStorage.getItem('divineaura_cart');
+    const data = localStorage.getItem('dhruvglobaltradingcompany_cart');
     return data ? JSON.parse(data) : [];
   });
 
   const persist = (items) => {
     setCartItems(items);
-    localStorage.setItem('divineaura_cart', JSON.stringify(items));
+    localStorage.setItem('dhruvglobaltradingcompany_cart', JSON.stringify(items));
   };
 
   const addToCart = (product, qty = 1) => {
     const existing = cartItems.find((item) => item._id === product._id);
-    const fallbackImage = 'https://via.placeholder.com/150x150?text=DivineAura';
+    const fallbackImage = 'https://via.placeholder.com/150x150?text=Dhruv+Global+Trading+Company';
 
     if (existing) {
       const updated = cartItems.map((item) =>

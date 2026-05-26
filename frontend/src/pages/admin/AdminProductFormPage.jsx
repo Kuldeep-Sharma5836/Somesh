@@ -9,7 +9,7 @@ const defaultForm = {
   description: '',
   price: 0,
   countInStock: 0,
-  brand: 'DivineAura',
+  brand: 'Dhruv Global Trading Company',
   category: '',
   images: [],
   isFeatured: false,

@@ -7,7 +7,7 @@ const data = [
   {
     name: 'Rohit Iyer',
     city: 'Bengaluru',
-    review: 'Loved the sandalwood incense. DivineAura has become my go-to store for festival shopping.',
+    review: 'Loved the sandalwood incense. Dhruv Global Trading Company has become my go-to store for festival shopping.',
   },
   {
     name: 'Mira Patel',

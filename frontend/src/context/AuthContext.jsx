@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const initAuth = async () => {
-      const token = localStorage.getItem('divineaura_token');
+      const token = localStorage.getItem('dhruvglobaltradingcompany_token');
       if (!token) {
         setLoading(false);
         return;
@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
         const { data } = await axiosClient.get('/auth/me');
         setUser(data);
       } catch (error) {
-        localStorage.removeItem('divineaura_token');
+        localStorage.removeItem('dhruvglobaltradingcompany_token');
       } finally {
         setLoading(false);
       }
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (payload) => {
     const { data } = await axiosClient.post('/auth/login', payload);
-    localStorage.setItem('divineaura_token', data.token);
+    localStorage.setItem('dhruvglobaltradingcompany_token', data.token);
     setUser(data);
     toast.success(`Welcome back, ${data.name}`);
     return data;
@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
 
   const loginAdmin = async (payload) => {
     const { data } = await axiosClient.post('/auth/admin/login', payload);
-    localStorage.setItem('divineaura_token', data.token);
+    localStorage.setItem('dhruvglobaltradingcompany_token', data.token);
     setUser(data);
     toast.success(`Welcome back, ${data.name}`);
     return data;
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (payload) => {
     const { data } = await axiosClient.post('/auth/register', payload);
-    localStorage.setItem('divineaura_token', data.token);
+    localStorage.setItem('dhruvglobaltradingcompany_token', data.token);
     setUser(data);
     toast.success('Account created successfully');
     return data;
@@ -55,14 +55,14 @@ export const AuthProvider = ({ children }) => {
 
   const loginWithGoogle = async (credential) => {
     const { data } = await axiosClient.post('/auth/google', { credential });
-    localStorage.setItem('divineaura_token', data.token);
+    localStorage.setItem('dhruvglobaltradingcompany_token', data.token);
     setUser(data);
     toast.success(`Welcome, ${data.name}`);
     return data;
   };
 
   const logout = () => {
-    localStorage.removeItem('divineaura_token');
+    localStorage.removeItem('dhruvglobaltradingcompany_token');
     setUser(null);
     toast.success('Logged out');
   };

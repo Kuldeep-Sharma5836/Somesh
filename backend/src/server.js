@@ -38,7 +38,7 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/payments', paymentRoutes);
 
 app.get('/api/health', (req, res) => {
-  res.json({ message: 'DivineAura API is running' });
+  res.json({ message: 'Dhruv Global Trading Company API is running' });
 });
 
 app.use(notFound);
