@@ -55,6 +55,38 @@ const ProfilePage = () => {
           disabled
           className="w-full rounded-lg border border-gold/30 bg-gray-100 px-3 py-2 text-sm"
         />
+        <input
+          value={profile.addresses?.[0]?.fullName || profile.name || ''}
+          onChange={(e) =>
+            setProfile({
+              ...profile,
+              addresses: [
+                {
+                  ...(profile.addresses?.[0] || {}),
+                  fullName: e.target.value,
+                },
+              ],
+            })
+          }
+          placeholder="Full name"
+          className="w-full rounded-lg border border-gold/30 px-3 py-2 text-sm"
+        />
+        <input
+          value={profile.addresses?.[0]?.phone || ''}
+          onChange={(e) =>
+            setProfile({
+              ...profile,
+              addresses: [
+                {
+                  ...(profile.addresses?.[0] || {}),
+                  phone: e.target.value,
+                },
+              ],
+            })
+          }
+          placeholder="Phone"
+          className="w-full rounded-lg border border-gold/30 px-3 py-2 text-sm"
+        />
         <textarea
           value={profile.addresses?.[0]?.street || ''}
           onChange={(e) =>
@@ -64,19 +96,81 @@ const ProfilePage = () => {
                 {
                   ...(profile.addresses?.[0] || {}),
                   street: e.target.value,
-                  fullName: profile.name,
-                  city: profile.addresses?.[0]?.city || 'Varanasi',
-                  state: profile.addresses?.[0]?.state || 'UP',
-                  postalCode: profile.addresses?.[0]?.postalCode || '221001',
-                  country: 'India',
-                  phone: profile.addresses?.[0]?.phone || '9999999999',
                 },
               ],
             })
           }
-          placeholder="Address"
+          placeholder="Street address"
           className="w-full rounded-lg border border-gold/30 px-3 py-2 text-sm"
         />
+        <div className="grid gap-3 sm:grid-cols-2">
+          <input
+            value={profile.addresses?.[0]?.city || ''}
+            onChange={(e) =>
+              setProfile({
+                ...profile,
+                addresses: [
+                  {
+                    ...(profile.addresses?.[0] || {}),
+                    city: e.target.value,
+                  },
+                ],
+              })
+            }
+            placeholder="City"
+            className="w-full rounded-lg border border-gold/30 px-3 py-2 text-sm"
+          />
+          <input
+            value={profile.addresses?.[0]?.state || ''}
+            onChange={(e) =>
+              setProfile({
+                ...profile,
+                addresses: [
+                  {
+                    ...(profile.addresses?.[0] || {}),
+                    state: e.target.value,
+                  },
+                ],
+              })
+            }
+            placeholder="State"
+            className="w-full rounded-lg border border-gold/30 px-3 py-2 text-sm"
+          />
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <input
+            value={profile.addresses?.[0]?.postalCode || ''}
+            onChange={(e) =>
+              setProfile({
+                ...profile,
+                addresses: [
+                  {
+                    ...(profile.addresses?.[0] || {}),
+                    postalCode: e.target.value,
+                  },
+                ],
+              })
+            }
+            placeholder="Postal code"
+            className="w-full rounded-lg border border-gold/30 px-3 py-2 text-sm"
+          />
+          <input
+            value={profile.addresses?.[0]?.country || ''}
+            onChange={(e) =>
+              setProfile({
+                ...profile,
+                addresses: [
+                  {
+                    ...(profile.addresses?.[0] || {}),
+                    country: e.target.value,
+                  },
+                ],
+              })
+            }
+            placeholder="Country"
+            className="w-full rounded-lg border border-gold/30 px-3 py-2 text-sm"
+          />
+        </div>
         <button type="submit" className="btn-primary w-full">
           Save Profile
         </button>

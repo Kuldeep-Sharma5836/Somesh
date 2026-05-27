@@ -17,9 +17,43 @@ const loadScript = (src) =>
 
 const CartPage = () => {
   const { cartItems, updateQty, removeFromCart, totals, clearCart } = useCart();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState('COD');
+
+  const buildShippingAddress = async () => {
+    let profile = user;
+
+    if (!profile?.addresses) {
+      const { data } = await axiosClient.get('/users/profile');
+      profile = data;
+    }
+
+    const addresses = Array.isArray(profile?.addresses) ? profile.addresses : [];
+    const preferred = addresses.find((address) => address.isDefault) || addresses[0];
+
+    if (!preferred?.street) {
+      throw new Error('Please add a delivery address in your profile');
+    }
+
+    if (!preferred.city || !preferred.state || !preferred.postalCode) {
+      throw new Error('Please complete your address details in your profile');
+    }
+
+    if (!preferred.phone) {
+      throw new Error('Please add a phone number in your profile before placing an order');
+    }
+
+    return {
+      fullName: preferred.fullName || profile?.name || 'Customer',
+      phone: preferred.phone,
+      street: preferred.street,
+      city: preferred.city,
+      state: preferred.state,
+      postalCode: preferred.postalCode,
+      country: preferred.country || 'India',
+    };
+  };
 
   const checkout = async () => {
     if (!isAuthenticated) {
@@ -30,6 +64,7 @@ const CartPage = () => {
 
     try {
       const fallbackImage = 'https://via.placeholder.com/150x150?text=Dhruv+Global+Trading+Company';
+      const shippingAddress = await buildShippingAddress();
       const orderPayload = {
         orderItems: cartItems.map((item) => ({
           product: item._id,
@@ -38,15 +73,7 @@ const CartPage = () => {
           qty: item.qty,
           price: item.price,
         })),
-        shippingAddress: {
-          fullName: 'Default User',
-          phone: '9999999999',
-          street: 'Temple Street',
-          city: 'Varanasi',
-          state: 'UP',
-          postalCode: '221001',
-          country: 'India',
-        },
+        shippingAddress,
       };
 
       if (paymentMethod === 'RAZORPAY') {
@@ -96,7 +123,11 @@ const CartPage = () => {
       clearCart();
       navigate('/profile');
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Checkout failed');
+      const message = error.response?.data?.message || error.message || 'Checkout failed';
+      toast.error(message);
+      if (message.toLowerCase().includes('address')) {
+        navigate('/profile');
+      }
     }
   };
 

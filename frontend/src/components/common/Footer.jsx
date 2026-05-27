@@ -10,8 +10,8 @@ const Footer = () => (
       <div>
         <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-maroon/70">Contact</h4>
         <p className="mt-2 text-sm text-maroon/80">support@dhruvglobaltradingcompany.com</p>
-        <p className="text-sm text-maroon/80">+91 90000 11223</p>
-        <p className="text-sm text-maroon/80">Varanasi, India</p>
+        <p className="text-sm text-maroon/80">+91 9897555391</p>
+        <p className="text-sm text-maroon/80">Agra, Uttar Pradesh 282009</p>
       </div>
       <div>
         <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-maroon/70">Social</h4>

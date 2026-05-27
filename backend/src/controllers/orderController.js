@@ -34,9 +34,24 @@ const getMyOrders = async (req, res) => {
 
 const getAllOrders = async (req, res) => {
   const orders = await Order.find({})
-    .populate('user', 'name email')
+    .populate('user', 'name email phone')
     .sort({ createdAt: -1 });
   res.json(orders);
+};
+
+const deleteOrder = async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    return res.status(404).json({ message: 'Order not found' });
+  }
+
+  if (!order.isDelivered && order.status !== 'delivered') {
+    return res.status(400).json({ message: 'Only delivered orders can be deleted' });
+  }
+
+  await order.deleteOne();
+  res.json({ message: 'Order deleted' });
 };
 
 const updateOrderStatus = async (req, res) => {
@@ -61,4 +76,5 @@ module.exports = {
   getMyOrders,
   getAllOrders,
   updateOrderStatus,
+  deleteOrder,
 };
