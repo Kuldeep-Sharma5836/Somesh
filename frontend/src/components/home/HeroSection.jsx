@@ -23,6 +23,10 @@ const HeroSection = () => (
           Festival Collection
         </a>
       </div>
+      <div className="mt-3 flex flex-wrap gap-6 text-xs uppercase tracking-[0.2em] text-white/70">
+        <span>Primary: Shop all products</span>
+        <span>Secondary: Jump to festival picks</span>
+      </div>
     </motion.div>
   </section>
 );
