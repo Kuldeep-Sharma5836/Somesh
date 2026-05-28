@@ -8,6 +8,15 @@ import resolveAssetUrl from '../../utils/resolveAssetUrl';
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
 
+  const sizes = product.sizes?.length
+    ? product.sizes
+    : [
+        { size: 'S', qty: product.countInStock },
+        { size: 'M', qty: product.countInStock },
+        { size: 'L', qty: product.countInStock },
+      ];
+  const firstAvailable = sizes.find((item) => item.qty > 0) || sizes[0];
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 12 }}
@@ -33,10 +42,27 @@ const ProductCard = ({ product }) => {
         >
           {product.name}
         </Link>
+        <div className="flex flex-wrap gap-2">
+          {sizes.map((item) => (
+            <span
+              key={item.size}
+              className={`rounded-full border px-2 py-0.5 text-[11px] font-semibold ${
+                item.qty === 0 ? 'border-gold/20 text-maroon/40' : 'border-gold/30 text-maroon'
+              }`}
+            >
+              {item.size}: {item.qty}
+            </span>
+          ))}
+        </div>
         <RatingStars rating={product.rating || 0} />
         <div className="flex items-center justify-between pt-2">
           <span className="text-lg font-bold text-saffron">{formatCurrency(product.price)}</span>
-          <button type="button" className="btn-primary" onClick={() => addToCart(product)}>
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={() => addToCart(product, 1, firstAvailable?.size || 'M')}
+            disabled={!firstAvailable || firstAvailable.qty === 0}
+          >
             Add to Cart
           </button>
         </div>

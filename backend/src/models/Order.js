@@ -8,6 +8,7 @@ const orderItemSchema = new mongoose.Schema(
       type: String,
       default: 'https://via.placeholder.com/150x150?text=Dhruv+Global+Trading+Company',
     },
+    size: { type: String, required: true, enum: ['S', 'M', 'L'] },
     qty: { type: Number, required: true, min: 1 },
     price: { type: Number, required: true, min: 0 },
   },

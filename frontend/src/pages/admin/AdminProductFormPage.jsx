@@ -4,11 +4,39 @@ import toast from 'react-hot-toast';
 import axiosClient from '../../api/axiosClient';
 import resolveAssetUrl from '../../utils/resolveAssetUrl';
 
+const SIZE_ORDER = ['S', 'M', 'L'];
+
+const splitStockAcrossSizes = (total) => {
+  const base = Math.floor(total / SIZE_ORDER.length);
+  const remainder = total % SIZE_ORDER.length;
+  return SIZE_ORDER.map((size, index) => ({
+    size,
+    qty: base + (index < remainder ? 1 : 0),
+  }));
+};
+
+const normalizeFormSizes = (sizes, countInStock) => {
+  if (!Array.isArray(sizes) || sizes.length === 0) {
+    return splitStockAcrossSizes(Number(countInStock) || 0);
+  }
+
+  const sizeMap = new Map();
+  sizes.forEach((entry) => {
+    if (!entry?.size) return;
+    const key = String(entry.size).toUpperCase();
+    if (!SIZE_ORDER.includes(key)) return;
+    sizeMap.set(key, Math.max(0, Number(entry.qty) || 0));
+  });
+
+  return SIZE_ORDER.map((size) => ({ size, qty: sizeMap.get(size) || 0 }));
+};
+
 const defaultForm = {
   name: '',
   description: '',
   price: 0,
   countInStock: 0,
+  sizes: SIZE_ORDER.map((size) => ({ size, qty: 0 })),
   brand: 'Dhruv Global Trading Company',
   category: '',
   images: [],
@@ -28,7 +56,11 @@ const AdminProductFormPage = () => {
 
       if (id) {
         const { data } = await axiosClient.get(`/products/${id}`);
-        setForm({ ...data, category: data.category?._id || '' });
+        setForm({
+          ...data,
+          category: data.category?._id || '',
+          sizes: normalizeFormSizes(data.sizes, data.countInStock),
+        });
       }
     };
 
@@ -56,11 +88,18 @@ const AdminProductFormPage = () => {
   const submit = async (e) => {
     e.preventDefault();
     try {
+      const normalizedSizes = normalizeFormSizes(form.sizes, form.countInStock);
+      const payload = {
+        ...form,
+        sizes: normalizedSizes,
+        countInStock: normalizedSizes.reduce((acc, item) => acc + item.qty, 0),
+      };
+
       if (id) {
-        await axiosClient.put(`/products/${id}`, form);
+        await axiosClient.put(`/products/${id}`, payload);
         toast.success('Product updated');
       } else {
-        await axiosClient.post('/products', form);
+        await axiosClient.post('/products', payload);
         toast.success('Product created');
       }
       navigate('/admin/products');
@@ -68,6 +107,8 @@ const AdminProductFormPage = () => {
       toast.error(error.response?.data?.message || 'Could not save product');
     }
   };
+
+  const totalStock = (form.sizes || []).reduce((acc, item) => acc + Number(item.qty || 0), 0);
 
   return (
     <div>
@@ -97,15 +138,13 @@ const AdminProductFormPage = () => {
           />
         </label>
         <label className="text-sm font-semibold text-maroon">
-          Stock Count
+          Total Stock (auto)
           <input
             id="product-stock"
-            required
             type="number"
-            placeholder="Stock"
-            className="mt-2 w-full rounded-lg border border-gold/30 px-3 py-2 text-sm"
-            value={form.countInStock}
-            onChange={(e) => setForm({ ...form, countInStock: Number(e.target.value) })}
+            readOnly
+            className="mt-2 w-full rounded-lg border border-gold/30 bg-beige/50 px-3 py-2 text-sm"
+            value={totalStock}
           />
         </label>
         <label className="text-sm font-semibold text-maroon">
@@ -143,6 +182,28 @@ const AdminProductFormPage = () => {
           />
           Featured Product
         </label>
+
+        <div className="md:col-span-2">
+          <p className="text-sm font-semibold text-maroon">Size Inventory</p>
+          <div className="mt-2 grid gap-3 sm:grid-cols-3">
+            {(form.sizes || SIZE_ORDER.map((size) => ({ size, qty: 0 }))).map((item, index) => (
+              <label key={item.size} className="text-xs font-semibold text-maroon">
+                {item.size}
+                <input
+                  type="number"
+                  min={0}
+                  className="mt-2 w-full rounded-lg border border-gold/30 px-3 py-2 text-sm"
+                  value={item.qty}
+                  onChange={(e) => {
+                    const next = [...(form.sizes || [])];
+                    next[index] = { ...next[index], qty: Number(e.target.value) };
+                    setForm({ ...form, sizes: next });
+                  }}
+                />
+              </label>
+            ))}
+          </div>
+        </div>
         <label className="md:col-span-2 text-sm font-semibold text-maroon">
           Description
           <textarea

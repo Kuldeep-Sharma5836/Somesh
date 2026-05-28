@@ -52,7 +52,18 @@ const AdminProductsPage = () => {
                 <td className="py-3">{item.name}</td>
                 <td>{item.category?.name}</td>
                 <td>{formatCurrency(item.price)}</td>
-                <td>{item.countInStock}</td>
+                <td>
+                  <div className="space-y-1">
+                    <span className="font-semibold">{item.countInStock}</span>
+                    <div className="flex flex-wrap gap-2 text-xs text-maroon/70">
+                      {(item.sizes || []).map((size) => (
+                        <span key={size.size}>
+                          {size.size}: {size.qty}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </td>
                 <td className="space-x-2">
                   <Link to={`/admin/products/${item._id}/edit`} className="text-saffron">
                     Edit

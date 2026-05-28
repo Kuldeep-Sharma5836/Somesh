@@ -1,5 +1,32 @@
 const Product = require('../models/Product');
 
+const SIZE_ORDER = ['S', 'M', 'L'];
+
+const splitStockAcrossSizes = (total) => {
+  const base = Math.floor(total / SIZE_ORDER.length);
+  const remainder = total % SIZE_ORDER.length;
+  return SIZE_ORDER.map((size, index) => ({
+    size,
+    qty: base + (index < remainder ? 1 : 0),
+  }));
+};
+
+const normalizeSizes = (sizes = [], countInStock = 0) => {
+  if (!Array.isArray(sizes) || sizes.length === 0) {
+    return splitStockAcrossSizes(Number(countInStock) || 0);
+  }
+
+  const sizeMap = new Map();
+  sizes.forEach((entry) => {
+    if (!entry || !entry.size) return;
+    const key = String(entry.size).toUpperCase();
+    if (!SIZE_ORDER.includes(key)) return;
+    sizeMap.set(key, Math.max(0, Number(entry.qty) || 0));
+  });
+
+  return SIZE_ORDER.map((size) => ({ size, qty: sizeMap.get(size) || 0 }));
+};
+
 const slugify = (text) =>
   text
     .toLowerCase()
@@ -51,6 +78,7 @@ const createProduct = async (req, res) => {
     description,
     price,
     countInStock,
+    sizes,
     brand,
     category,
     images = [],
@@ -64,12 +92,16 @@ const createProduct = async (req, res) => {
 
   const slug = `${slugify(name)}-${Date.now()}`;
 
+  const normalizedSizes = normalizeSizes(sizes, countInStock);
+  const computedCount = normalizedSizes.reduce((acc, item) => acc + item.qty, 0);
+
   const product = await Product.create({
     name,
     slug,
     description,
     price,
-    countInStock,
+    countInStock: computedCount,
+    sizes: normalizedSizes,
     brand,
     category,
     images,
@@ -93,6 +125,7 @@ const updateProduct = async (req, res) => {
     'description',
     'price',
     'countInStock',
+    'sizes',
     'brand',
     'category',
     'images',
@@ -105,6 +138,12 @@ const updateProduct = async (req, res) => {
       product[field] = req.body[field];
     }
   });
+
+  if (req.body.sizes !== undefined) {
+    const normalizedSizes = normalizeSizes(req.body.sizes, req.body.countInStock);
+    product.sizes = normalizedSizes;
+    product.countInStock = normalizedSizes.reduce((acc, item) => acc + item.qty, 0);
+  }
 
   if (req.body.name) {
     product.slug = `${slugify(req.body.name)}-${Date.now()}`;

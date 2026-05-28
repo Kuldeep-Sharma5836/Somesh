@@ -10,6 +10,14 @@ const reviewSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const sizeSchema = new mongoose.Schema(
+  {
+    size: { type: String, enum: ['S', 'M', 'L'], required: true },
+    qty: { type: Number, required: true, min: 0, default: 0 },
+  },
+  { _id: false }
+);
+
 const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
@@ -17,6 +25,7 @@ const productSchema = new mongoose.Schema(
     description: { type: String, required: true },
     price: { type: Number, required: true, min: 0 },
     countInStock: { type: Number, required: true, min: 0, default: 0 },
+    sizes: { type: [sizeSchema], default: [] },
     brand: { type: String, default: 'Dhruv Global Trading Company' },
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
     images: [{ type: String }],

@@ -19,6 +19,7 @@ const ProductDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
   const [review, setReview] = useState({ rating: 5, comment: '' });
+  const [selectedSize, setSelectedSize] = useState('M');
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -33,8 +34,16 @@ const ProductDetailsPage = () => {
     fetchProduct();
   }, [id]);
 
+  useEffect(() => {
+    if (!product) return;
+    const available = product.sizes?.find((item) => item.qty > 0) || product.sizes?.[0];
+    if (available?.size) {
+      setSelectedSize(available.size);
+    }
+  }, [product]);
+
   const handleBuyNow = () => {
-    addToCart(product, qty);
+    addToCart(product, qty, selectedSize);
     navigate('/cart');
   };
 
@@ -51,6 +60,15 @@ const ProductDetailsPage = () => {
 
   if (loading) return <Spinner label="Loading product details..." />;
   if (!product) return <p>Product not found.</p>;
+
+  const sizes = product.sizes?.length
+    ? product.sizes
+    : [
+        { size: 'S', qty: product.countInStock },
+        { size: 'M', qty: product.countInStock },
+        { size: 'L', qty: product.countInStock },
+      ];
+  const selectedSizeQty = sizes.find((item) => item.size === selectedSize)?.qty ?? 0;
 
   return (
     <section className="grid gap-8 lg:grid-cols-2">
@@ -81,6 +99,30 @@ const ProductDetailsPage = () => {
         <p className="mt-4 text-sm leading-6 text-maroon/80">{product.description}</p>
         <p className="mt-5 text-3xl font-bold text-saffron">{formatCurrency(product.price)}</p>
 
+        <div className="mt-5">
+          <p className="text-sm font-semibold text-maroon">Select Size</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {sizes.map((item) => (
+              <button
+                key={item.size}
+                type="button"
+                disabled={item.qty === 0}
+                onClick={() => {
+                  setSelectedSize(item.size);
+                  setQty(1);
+                }}
+                className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                  selectedSize === item.size
+                    ? 'border-saffron bg-saffron/10 text-saffron'
+                    : 'border-gold/30 text-maroon'
+                } ${item.qty === 0 ? 'cursor-not-allowed opacity-50' : ''}`}
+              >
+                {item.size} ({item.qty})
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="mt-4 flex items-center gap-3">
           <label htmlFor="qty" className="text-sm font-semibold text-maroon">
             Quantity
@@ -89,15 +131,21 @@ const ProductDetailsPage = () => {
             id="qty"
             type="number"
             min={1}
-            max={product.countInStock}
+            max={selectedSizeQty}
             value={qty}
+            disabled={selectedSizeQty === 0}
             onChange={(e) => setQty(Number(e.target.value))}
             className="w-20 rounded-lg border border-gold/30 px-3 py-2 text-sm"
           />
         </div>
 
         <div className="mt-6 flex gap-3">
-          <button type="button" className="btn-primary" onClick={() => addToCart(product, qty)}>
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={() => addToCart(product, qty, selectedSize)}
+            disabled={selectedSizeQty === 0}
+          >
             Add to Cart
           </button>
           <button type="button" className="btn-secondary" onClick={handleBuyNow}>

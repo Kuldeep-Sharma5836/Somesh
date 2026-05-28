@@ -65,11 +65,12 @@ const CartPage = () => {
     try {
       const fallbackImage = 'https://via.placeholder.com/150x150?text=Dhruv+Global+Trading+Company';
       const shippingAddress = await buildShippingAddress();
-      const orderPayload = {
+        const orderPayload = {
         orderItems: cartItems.map((item) => ({
           product: item._id,
           name: item.name,
           image: item.image || fallbackImage,
+            size: item.size,
           qty: item.qty,
           price: item.price,
         })),
@@ -149,17 +150,22 @@ const CartPage = () => {
                 <img src={item.image} alt={item.name} className="h-24 w-24 rounded-lg object-cover" />
                 <div className="flex-1">
                   <p className="font-semibold text-maroon">{item.name}</p>
+                  <p className="text-xs text-maroon/70">Size: {item.size}</p>
                   <p className="text-sm text-saffron">{formatCurrency(item.price)}</p>
                 </div>
                 <input
                   type="number"
                   min={1}
-                  max={item.countInStock}
+                  max={item.sizeQty || item.countInStock}
                   value={item.qty}
-                  onChange={(e) => updateQty(item._id, e.target.value)}
+                  onChange={(e) => updateQty(item._id, item.size, e.target.value)}
                   className="w-20 rounded-lg border border-gold/30 px-2 py-1 text-sm"
                 />
-                <button type="button" className="text-sm font-semibold text-maroon" onClick={() => removeFromCart(item._id)}>
+                <button
+                  type="button"
+                  className="text-sm font-semibold text-maroon"
+                  onClick={() => removeFromCart(item._id, item.size)}
+                >
                   Remove
                 </button>
               </article>
