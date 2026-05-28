@@ -90,10 +90,6 @@ const deleteOrder = async (req, res) => {
     return res.status(404).json({ message: 'Order not found' });
   }
 
-  if (!order.isDelivered && order.status !== 'delivered') {
-    return res.status(400).json({ message: 'Only delivered orders can be deleted' });
-  }
-
   await order.deleteOne();
   res.json({ message: 'Order deleted' });
 };

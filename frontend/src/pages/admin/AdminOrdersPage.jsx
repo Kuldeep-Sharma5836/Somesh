@@ -183,15 +183,13 @@ const AdminOrdersPage = () => {
                     ))}
                   </select>
                 </label>
-                {(order.isDelivered || order.status === 'delivered') && (
-                  <button
-                    type="button"
-                    className="rounded-lg border border-maroon/30 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-maroon"
-                    onClick={() => deleteOrder(order)}
-                  >
-                    Delete Order
-                  </button>
-                )}
+                <button
+                  type="button"
+                  className="rounded-lg border border-maroon/30 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-maroon"
+                  onClick={() => deleteOrder(order)}
+                >
+                  Delete Order
+                </button>
               </div>
             </div>
           </article>
